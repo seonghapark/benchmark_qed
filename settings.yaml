@@ -1,0 +1,121 @@
+## Input Configuration
+input:
+  dataset_path: /storage/data/new_samples_local
+  input_type: json
+  text_column: abstract # The column in the dataset that contains the text to be processed.
+  metadata_columns: [title, date, doi, authors, references] # Additional metadata columns to include in the input.
+  file_encoding: utf-8-sig
+
+## Encoder configuration
+encoding:
+  model_name: o200k_base
+  chunk_size: 256
+  chunk_overlap: 3
+
+## Sampling Configuration
+sampling:
+  num_clusters: 32 # fast-debug profile
+  num_samples_per_cluster: 16
+  random_seed: 42
+
+## LLM Configuration
+chat_model:
+  model: Qwen/Qwen2.5-1.5B-Instruct
+  auth_type: azure_managed_identity
+  llm_provider: local.hf.chat
+  concurrent_requests: 8  # Local generation is memory intensive; keep this low.
+  init_args:
+    device: auto
+    trust_remote_code: true
+  call_args:
+    temperature: 0.0
+    seed: 42
+    max_new_tokens: 256
+  custom_providers:
+    - model_type: chat
+      name: local.hf.chat
+      module: local_hf_provider
+      model_class: HuggingFaceLocalChat
+
+embedding_model:
+  model: sentence-transformers/all-MiniLM-L6-v2
+  auth_type: azure_managed_identity
+  llm_provider: local.hf.embedding
+  concurrent_requests: 8
+  init_args:
+    device: auto
+  custom_providers:
+    - model_type: embedding
+      name: local.hf.embedding
+      module: local_hf_provider
+      model_class: HuggingFaceLocalEmbedding
+
+## Question Generation Configuration
+data_local:
+  num_questions: 200
+  oversample_factor: 2.0
+data_global:
+  num_questions: 200
+  oversample_factor: 2.0
+activity_local:
+  num_questions: 200
+  oversample_factor: 2.0
+  # num_personas: 5 # adjust this based on the number of questions you want to generate
+  # num_tasks_per_persona: 2 # adjust this based on the number of questions you want to generate
+  # num_entities_per_task: 5 # adjust this based on the number of questions you want to generate
+activity_global:
+  num_questions: 200
+  oversample_factor: 2.0
+  # num_personas: 5 # adjust this based on the number of questions you want to generate
+  # num_tasks_per_persona: 2 # adjust this based on the number of questions you want to generate
+  # num_entities_per_task: 5 # adjust this based on the number of questions you want to generate
+
+concurrent_requests: 8
+
+activity_questions_prompt_config:
+  activity_context_prompt_config:
+    data_summary_prompt_config:
+      summary_map_system_prompt:
+        prompt: prompts/summarization/summary_map_system_prompt.txt
+      summary_map_user_prompt:
+        prompt: prompts/summarization/summary_map_user_prompt.txt
+      summary_reduce_system_prompt:
+        prompt: prompts/summarization/summary_reduce_system_prompt.txt
+      summary_reduce_user_prompt:
+        prompt: prompts/summarization/summary_reduce_user_prompt.txt
+    activity_identification_prompt:
+      prompt: prompts/activity_questions/activity_context/activity_identification_prompt.txt
+    entity_extraction_map_system_prompt:
+      prompt: prompts/activity_questions/activity_context/entity_extraction_map_system_prompt.txt
+    entity_extraction_map_user_prompt:
+      prompt: prompts/activity_questions/activity_context/entity_extraction_map_user_prompt.txt
+    entity_extraction_reduce_system_prompt:
+      prompt: prompts/activity_questions/activity_context/entity_extraction_reduce_system_prompt.txt
+    entity_extraction_reduce_user_prompt:
+      prompt: prompts/activity_questions/activity_context/entity_extraction_reduce_user_prompt.txt
+  activity_global_prompt_config:
+    activity_global_gen_system_prompt:
+      prompt: prompts/activity_questions/activity_global/activity_global_gen_system_prompt.txt
+    activity_global_gen_user_prompt:
+      prompt: prompts/activity_questions/activity_global/activity_global_gen_user_prompt.txt
+  activity_local_prompt_config:
+    activity_local_gen_system_prompt:
+      prompt: prompts/activity_questions/activity_local/activity_local_gen_system_prompt.txt
+    activity_local_gen_user_prompt:
+      prompt: prompts/activity_questions/activity_local/activity_local_gen_user_prompt.txt
+
+data_questions_prompt_config:
+  claim_extraction_system_prompt:
+    prompt: prompts/data_questions/claim_extraction_system_prompt.txt
+  data_global_prompt_config:
+    data_global_gen_user_prompt:
+      prompt: prompts/data_questions/data_global/data_global_gen_user_prompt.txt
+    data_global_gen_system_prompt:
+      prompt: prompts/data_questions/data_global/data_global_gen_system_prompt.txt
+  data_local_prompt_config:
+    data_local_gen_system_prompt:
+      prompt: prompts/data_questions/data_local/data_local_gen_system_prompt.txt
+    data_local_expansion_system_prompt:
+      prompt: prompts/data_questions/data_local/data_local_expansion_system_prompt.txt
+    data_local_gen_user_prompt:
+      prompt: prompts/data_questions/data_local/data_local_gen_user_prompt.txt
