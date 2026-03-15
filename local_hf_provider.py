@@ -194,6 +194,8 @@ class HuggingFaceLocalChat:
     ) -> BaseModelResponse:
         call_kwargs = dict(kwargs)
         temperature = float(call_kwargs.pop("temperature", 0.0) or 0.0)
+        top_p = call_kwargs.pop("top_p", None)
+        top_k = call_kwargs.pop("top_k", None)
         max_new_tokens = int(call_kwargs.pop("max_new_tokens", call_kwargs.pop("max_tokens", 256)))
 
         if hasattr(self._tokenizer, "apply_chat_template"):
@@ -208,13 +210,30 @@ class HuggingFaceLocalChat:
             ) + "\nassistant:"
 
         def _generate() -> str:
+            do_sample = temperature > 0
+            gen_kwargs: dict[str, Any] = {
+                "max_new_tokens": max_new_tokens,
+                "do_sample": do_sample,
+                "return_full_text": False,
+                "pad_token_id": self._tokenizer.eos_token_id,
+            }
+
+            if do_sample:
+                gen_kwargs["temperature"] = max(temperature, 1e-5)
+                if top_p is not None:
+                    gen_kwargs["top_p"] = float(top_p)
+                if top_k is not None:
+                    gen_kwargs["top_k"] = int(top_k)
+            else:
+                # Keep sampling-related settings at greedy defaults to avoid
+                # transformers warnings about ignored generation flags.
+                gen_kwargs["temperature"] = 1.0
+                gen_kwargs["top_p"] = 1.0
+                gen_kwargs["top_k"] = 50
+
             outputs = self._generator(
                 prompt,
-                max_new_tokens=max_new_tokens,
-                do_sample=temperature > 0,
-                temperature=max(temperature, 1e-5),
-                return_full_text=False,
-                pad_token_id=self._tokenizer.eos_token_id,
+                **gen_kwargs,
             )
             text = outputs[0].get("generated_text", "")
             return text.strip()
