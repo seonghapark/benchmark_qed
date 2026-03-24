@@ -1,5 +1,5 @@
 input:
-  dataset_path: /storage/data/new_samples_local
+  dataset_path: /storage/output/_normalized_input
   input_type: json
   text_column: abstract
 
@@ -9,12 +9,13 @@ encoding:
   chunk_overlap: 2
 
 sampling:
-  num_clusters: 2
-  num_samples_per_cluster: 2
+  num_clusters: 32
+  num_samples_per_cluster: 16
   random_seed: 42
 
 chat_model:
   model: Qwen/Qwen2.5-1.5B-Instruct
+  api_key: local
   llm_provider: local.hf.chat
   concurrent_requests: 1
   init_args:
@@ -31,6 +32,7 @@ chat_model:
 
 embedding_model:
   model: sentence-transformers/all-MiniLM-L6-v2
+  api_key: local
   llm_provider: local.hf.embedding
   concurrent_requests: 1
   init_args:
@@ -42,5 +44,5 @@ embedding_model:
       model_class: HuggingFaceLocalEmbedding
 
 data_local:
-  num_questions: 10
-  oversample_factor: 1.5
+  num_questions: 500
+  oversample_factor: 2.0

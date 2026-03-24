@@ -10,6 +10,7 @@ Examples:
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import shutil
 import subprocess
@@ -76,6 +77,119 @@ def build_env(extra_pythonpaths: list[Path]) -> dict[str, str]:
     return env
 
 
+def _safe_stem(path: Path) -> str:
+    stem = path.stem.strip()
+    if not stem:
+        return "doc"
+    return "".join(ch if ch.isalnum() or ch in {"-", "_"} else "_" for ch in stem)
+
+
+def normalize_json_dataset(src_dir: Path, dst_dir: Path, text_column: str) -> tuple[int, int, int, int]:
+    """Normalize JSON input to object-per-file format expected by benchmark-qed.
+
+    Returns:
+      (written_docs, source_files, skipped_items, expanded_list_items)
+    """
+    dst_dir.mkdir(parents=True, exist_ok=True)
+
+    source_files = 0
+    written_docs = 0
+    skipped_items = 0
+    expanded_list_items = 0
+
+    for src in sorted(src_dir.rglob("*.json")):
+        source_files += 1
+        try:
+            payload = json.loads(src.read_text(encoding="utf-8"))
+        except Exception:
+            skipped_items += 1
+            continue
+
+        base = _safe_stem(src)
+
+        if isinstance(payload, dict):
+            out_name = f"{base}_{written_docs:08d}.json"
+            (dst_dir / out_name).write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+            written_docs += 1
+            continue
+
+        if isinstance(payload, list):
+            for idx, item in enumerate(payload):
+                if not isinstance(item, dict):
+                    skipped_items += 1
+                    continue
+
+                # Keep items that include the configured text column if present,
+                # otherwise keep any object and let benchmark-qed apply its own handling.
+                if text_column and text_column not in item:
+                    # Do not force-drop; this keeps compatibility with heterogeneous schemas.
+                    pass
+
+                out_name = f"{base}_{idx:05d}_{written_docs:08d}.json"
+                (dst_dir / out_name).write_text(json.dumps(item, ensure_ascii=False), encoding="utf-8")
+                written_docs += 1
+                expanded_list_items += 1
+            continue
+
+        skipped_items += 1
+
+    return written_docs, source_files, skipped_items, expanded_list_items
+
+
+def prepare_runtime_config(config_path: Path, output_dir: Path) -> Path:
+    try:
+        import yaml  # type: ignore
+    except Exception as exc:
+        raise SystemExit(
+            "Missing PyYAML dependency. Install with: python3 -m pip install --user pyyaml"
+        ) from exc
+
+    cfg = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    if not isinstance(cfg, dict):
+        raise SystemExit(f"Invalid YAML config structure in: {config_path}")
+
+    input_cfg = cfg.get("input")
+    if not isinstance(input_cfg, dict):
+        raise SystemExit("Config must include an 'input' mapping")
+
+    dataset_path = input_cfg.get("dataset_path")
+    if not isinstance(dataset_path, str) or not dataset_path.strip():
+        raise SystemExit("Config input.dataset_path must be a non-empty string")
+
+    src_dir = Path(dataset_path).expanduser().resolve()
+    if not src_dir.exists():
+        raise SystemExit(f"Config dataset path not found: {src_dir}")
+
+    text_column = str(input_cfg.get("text_column") or "text")
+    normalized_dir = output_dir / "_normalized_input"
+    written_docs, source_files, skipped_items, expanded = normalize_json_dataset(src_dir, normalized_dir, text_column)
+    if written_docs == 0:
+        raise SystemExit(
+            "No valid JSON documents found after normalization. "
+            f"source_files={source_files}, skipped_items={skipped_items}"
+        )
+
+    # benchmark-qed validates these fields even with custom local providers.
+    for section in ("chat_model", "embedding_model"):
+        block = cfg.get(section)
+        if isinstance(block, dict) and not block.get("api_key"):
+            block["api_key"] = "local"
+
+    input_cfg["dataset_path"] = str(normalized_dir)
+
+    runtime_cfg = output_dir / "_runtime_settings.yaml"
+    runtime_cfg.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+
+    print(
+        "Prepared normalized input:",
+        f"source_files={source_files}",
+        f"written_docs={written_docs}",
+        f"expanded_list_items={expanded}",
+        f"skipped_items={skipped_items}",
+    )
+    return runtime_cfg
+
+
 def parse_args() -> argparse.Namespace:
     here = Path(__file__).resolve().parent
     p = argparse.ArgumentParser(description="Local wrapper for benchmark-qed autoq")
@@ -139,11 +253,15 @@ def main() -> None:
                 "Try: python3 -m pip install --user benchmark-qed"
             )
 
+    runtime_config = config
+    if not args.dry_run:
+        runtime_config = prepare_runtime_config(config, output)
+
     if runner_type == "binary":
         cmd = [
             runner_value,
             "autoq",
-            str(config),
+            str(runtime_config),
             str(output),
             "--generation-types",
             *args.generation_types,
@@ -154,7 +272,7 @@ def main() -> None:
             "-m",
             runner_value,
             "autoq",
-            str(config),
+            str(runtime_config),
             str(output),
             "--generation-types",
             *args.generation_types,

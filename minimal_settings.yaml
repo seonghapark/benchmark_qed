@@ -1,5 +1,5 @@
 input:
-  dataset_path: /storage/data/new_samples_local
+  dataset_path: /storage/araia/vector-search-engine/data/new_samples
   input_type: json
   text_column: abstract
 
@@ -15,6 +15,7 @@ sampling:
 
 chat_model:
   model: Qwen/Qwen2.5-1.5B-Instruct
+  api_key: local
   llm_provider: local.hf.chat
   concurrent_requests: 1
   init_args:
@@ -31,6 +32,7 @@ chat_model:
 
 embedding_model:
   model: sentence-transformers/all-MiniLM-L6-v2
+  api_key: local
   llm_provider: local.hf.embedding
   concurrent_requests: 1
   init_args:
