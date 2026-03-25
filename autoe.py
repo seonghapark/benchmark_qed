@@ -26,6 +26,8 @@ if "apex" not in sys.modules:
 from sentence_transformers.SentenceTransformer import SentenceTransformer
 from sentence_transformers.cross_encoder.CrossEncoder import CrossEncoder
 
+from answer_evaluation import evaluate_generated_answers, load_reference_answers
+
 
 def tokenize(text: str) -> list[str]:
     return re.findall(r"[a-z0-9]+", text.lower())
@@ -409,6 +411,27 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--nprobe", type=int, default=32)
     parser.add_argument("--dense-weight", type=float, default=0.5)
     parser.add_argument("--sparse-weight", type=float, default=0.5)
+    parser.add_argument("--evaluate", action="store_true", help="Evaluate generated answers against references")
+    parser.add_argument("--reference-file", type=str, default="", help="Path to reference answers (.json or .jsonl)")
+    parser.add_argument(
+        "--judge-model",
+        type=str,
+        default="",
+        help="Optional local judge model name for LLM-based scoring pass",
+    )
+    parser.add_argument(
+        "--judge-max-new-tokens",
+        type=int,
+        default=96,
+        help="Max new tokens for judge model output",
+    )
+    parser.add_argument(
+        "--judge-device",
+        type=str,
+        default="auto",
+        choices=["auto", "cpu", "cuda"],
+        help="Device for judge model scoring",
+    )
     parser.add_argument("--output", type=str, default="/storage/qed/autoe_qa_pairs.json")
     return parser.parse_args()
 
@@ -505,9 +528,51 @@ def main() -> None:
             "embedding_model": args.embedding_model,
             "answer_model": args.answer_model,
             "num_pairs": args.num_pairs,
+            "evaluation_enabled": bool(args.evaluate),
+            "reference_file": args.reference_file,
+            "judge_model": args.judge_model,
         },
         "qa_pairs": qa_pairs,
     }
+
+    if args.evaluate:
+        if not args.reference_file:
+            raise RuntimeError("--evaluate requires --reference-file")
+
+        reference_path = Path(args.reference_file)
+        if not reference_path.exists():
+            raise FileNotFoundError(f"Reference file not found: {reference_path}")
+
+        references_by_question = load_reference_answers(reference_path)
+        predictions = [
+            {
+                "question": str(item.get("question", "")),
+                "answer": str(item.get("answer", "")),
+            }
+            for item in qa_pairs
+        ]
+
+        evaluation = evaluate_generated_answers(
+            predictions=predictions,
+            references_by_question=references_by_question,
+            judge_model_name=args.judge_model or None,
+            judge_max_new_tokens=args.judge_max_new_tokens,
+            judge_device=args.judge_device,
+        )
+        payload["evaluation"] = evaluation
+
+        agg = evaluation.get("aggregate", {}) if isinstance(evaluation, dict) else {}
+        print(
+            "Evaluation summary:",
+            f"EM={agg.get('exact_match', 0.0):.4f}",
+            f"F1={agg.get('f1', 0.0):.4f}",
+            f"ACC={agg.get('accuracy', 0.0):.4f}",
+            f"ROUGE-1={agg.get('rouge1_f1', 0.0):.4f}",
+            f"ROUGE-2={agg.get('rouge2_f1', 0.0):.4f}",
+            f"ROUGE-L={agg.get('rougeL_f1', 0.0):.4f}",
+            f"BLEU={agg.get('bleu', 0.0):.4f}",
+        )
+
     output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved {len(qa_pairs)} question-answer pairs to {output_path}")
 
