@@ -9,8 +9,8 @@ encoding:
   chunk_overlap: 2
 
 sampling:
-  num_clusters: 32
-  num_samples_per_cluster: 16
+  num_clusters: 64
+  num_samples_per_cluster: 64
   random_seed: 42
 
 chat_model:
@@ -23,7 +23,7 @@ chat_model:
     trust_remote_code: true
   call_args:
     temperature: 0.0
-    max_new_tokens: 64
+    max_new_tokens: 256
   custom_providers:
     - model_type: chat
       name: local.hf.chat
@@ -44,5 +44,5 @@ embedding_model:
       model_class: HuggingFaceLocalEmbedding
 
 data_local:
-  num_questions: 500
+  num_questions: 1000
   oversample_factor: 2.0
