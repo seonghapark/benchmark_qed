@@ -1,0 +1,59 @@
+## Input Configuration
+base:
+  name: arag
+  answer_base_path: /storage/araia/vector-search-engine/arag  # The path to the base answers that you want to compare other RAG answers to. Modify this based on your dataset.
+# others: # List of other conditions to compare against the base.
+#   - name: lazygraphrag
+#     answer_base_path: input/lazygraphrag
+#   - name: graphrag_global
+#     answer_base_path: input/graphrag_global
+question_sets: # List of question sets to use for scoring.
+  - /storage/araia/vector-search-engine/benchmark_qed/autoq_test/output/data_local_questions/selected_questions_text
+
+
+## Scoring Configuration
+# criteria:
+#   - name: "criteria name"
+#     description: "criteria description"
+trials: 4 # Number of trials to repeat the scoring process for each question. Should be an even number to allow for counterbalancing.
+
+## LLM Configuration
+llm_config: 
+  model: Qwen/Qwen2.5-1.5B-Instruct
+  api_key: local
+  llm_provider: local.hf.chat
+  concurrent_requests: 4
+  init_args:
+    device: auto
+    trust_remote_code: true
+  call_args:
+    temperature: 0.0
+    max_new_tokens: 256
+    max_length: 512
+  custom_providers:
+    - model_type: chat
+      name: local.hf.chat
+      module: local_hf_provider
+      model_class: HuggingFaceLocalChat
+
+  # init_args:
+  #   Additional initialization arguments for the LLM can be added here.
+  #   For example, you can set the model version or other parameters.
+  #   api_version: 2024-12-01-preview
+  #   azure_endpoint: https://<instance>.openai.azure.com
+  # call_args:
+  #   Additional arguments for the LLM call can be added here.
+  #   For example, you can set the temperature, max tokens, etc.
+  #   temperature: 0.0
+  #   seed: 42
+  # custom_providers: # When implementing a custom LLM provider, you can add it here.
+  #   - model_type: chat
+  #     name: custom.chat # This name should match the llm_provider above
+  #     module: custom_test.custom_provider
+  #     model_class: CustomChatModel
+
+prompts_config:
+  user_prompt:
+    prompt: prompts/pairwise_user_prompt.txt
+  system_prompt:
+    prompt: prompts/pairwise_system_prompt.txt

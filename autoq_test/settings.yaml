@@ -1,0 +1,172 @@
+## Input Configuration
+input:
+  dataset_path: /tmp/pes2o_v2val_individual/
+  input_type: json
+  text_column: text # The column in the dataset that contains the text to be processed. Modify this based on your dataset.
+  metadata_columns: [title] # Additional metadata columns to include in the input. Modify this based on your dataset.
+  file_encoding: utf-8-sig
+  max_new_tokens: 256
+  max_length: 512
+
+## Encoder configuration
+encoding:
+  model_name: o200k_base
+  chunk_size: 256
+  chunk_overlap: 3
+  max_new_tokens: 256
+  max_length: 512
+
+## Sampling Configuration
+sampling:
+  num_clusters: 64 # adjust this based on your dataset size and the number of questions you want to generate
+  num_samples_per_cluster: 16
+  random_seed: 42
+  max_new_tokens: 256
+  max_length: 512
+
+## LLM Configuration
+chat_model:
+  max_new_tokens: 256
+  max_length: 512
+  model: Qwen/Qwen2.5-1.5B-Instruct
+  api_key: local
+  llm_provider: local.hf.chat
+  concurrent_requests: 1
+  init_args:
+    device: auto
+    trust_remote_code: true
+  call_args:
+    temperature: 0.0
+    max_new_tokens: 256
+    max_length: 512
+  custom_providers:
+    - model_type: chat
+      name: local.hf.chat
+      module: local_hf_provider
+      model_class: HuggingFaceLocalChat
+# chat_model: 
+#   model: gpt-4.1
+#   auth_type: api_key # or azure_managed_identity
+#   api_key: ${OPENAI_API_KEY} # remove this if using azure_managed_identity
+#   llm_provider: openai.chat # or azure.openai.chat | azure.inference.chat
+#   concurrent_requests: 4 # The number of concurrent requests to send to the model.
+#   # init_args:
+#   #   Additional initialization arguments for the LLM can be added here.
+#   #   For example, you can set the model version or other parameters.
+#   #   api_version: 2024-12-01-preview
+#   #   azure_endpoint: https://<instance>.openai.azure.com
+#   # call_args:
+#   #   Additional arguments for the LLM call can be added here.
+#   #   For example, you can set the temperature, max tokens, etc.
+#   #   temperature: 0.0
+#   #   seed: 42
+#   # custom_providers: # When implementing a custom LLM provider, you can add it here.
+#   #   - model_type: chat
+#   #     name: custom.chat # This name should match the llm_provider above
+#   #     module: custom_test.custom_provider
+#   #     model_class: CustomChatModel
+
+
+
+embedding_model:
+  model: Qwen/Qwen3-Embedding-0.6B
+  api_key: local
+  llm_provider: local.hf.embedding
+  concurrent_requests: 1
+  init_args:
+    device: auto
+  custom_providers:
+    - model_type: embedding
+      name: local.hf.embedding
+      module: local_hf_provider
+      model_class: HuggingFaceLocalEmbedding
+# embedding_model: 
+#   model: text-embedding-3-large
+#   auth_type: api_key # or azure_managed_identity
+#   api_key: ${OPENAI_API_KEY} # remove this if using azure_managed_identity
+#   llm_provider: openai.embedding # or azure.openai.embedding | azure.inference.embedding
+#   # init_args:
+#   #   Additional initialization arguments for the LLM can be added here.
+#   #   For example, you can set the model version or other parameters.
+#   #   api_version: 2024-12-01-preview
+#   #   azure_endpoint: https://<instance>.openai.azure.com
+#   # call_args:
+#   #   Additional arguments for the LLM call can be added here.
+#   #   For example, you can set the temperature, max tokens, etc.
+#   #   temperature: 0.0
+#   #   seed: 42
+#   # custom_providers: # When implementing a custom LLM provider, you can add it here.
+#   #   - model_type: chat
+#   #     name: custom.chat # This name should match the llm_provider above
+#   #     module: custom_test.custom_provider
+#   #     model_class: CustomChatModel
+
+## Question Generation Configuration
+data_local:
+  num_questions: 200
+  oversample_factor: 2.0
+data_global:
+  num_questions: 200
+  oversample_factor: 2.0
+activity_local:
+  num_questions: 200
+  oversample_factor: 2.0
+  num_personas: 5 # adjust this based on the number of questions you want to generate
+  num_tasks_per_persona: 2 # adjust this based on the number of questions you want to generate
+  num_entities_per_task: 5 # adjust this based on the number of questions you want to generate
+activity_global:
+  num_questions: 200
+  oversample_factor: 2.0
+  num_personas: 5 # adjust this based on the number of questions you want to generate
+  num_tasks_per_persona: 2 # adjust this based on the number of questions you want to generate
+  num_entities_per_task: 5 # adjust this based on the number of questions you want to generate
+
+concurrent_requests: 8
+
+activity_questions_prompt_config:
+  activity_context_prompt_config:
+    data_summary_prompt_config:
+      summary_map_system_prompt:
+        prompt: prompts/summarization/summary_map_system_prompt.txt
+      summary_map_user_prompt:
+        prompt: prompts/summarization/summary_map_user_prompt.txt
+      summary_reduce_system_prompt:
+        prompt: prompts/summarization/summary_reduce_system_prompt.txt
+      summary_reduce_user_prompt:
+        prompt: prompts/summarization/summary_reduce_user_prompt.txt
+    activity_identification_prompt:
+      prompt: prompts/activity_questions/activity_context/activity_identification_prompt.txt
+    entity_extraction_map_system_prompt:
+      prompt: prompts/activity_questions/activity_context/entity_extraction_map_system_prompt.txt
+    entity_extraction_map_user_prompt:
+      prompt: prompts/activity_questions/activity_context/entity_extraction_map_user_prompt.txt
+    entity_extraction_reduce_system_prompt:
+      prompt: prompts/activity_questions/activity_context/entity_extraction_reduce_system_prompt.txt
+    entity_extraction_reduce_user_prompt:
+      prompt: prompts/activity_questions/activity_context/entity_extraction_reduce_user_prompt.txt
+  activity_global_prompt_config:
+    activity_global_gen_system_prompt:
+      prompt: prompts/activity_questions/activity_global/activity_global_gen_system_prompt.txt
+    activity_global_gen_user_prompt:
+      prompt: prompts/activity_questions/activity_global/activity_global_gen_user_prompt.txt
+  activity_local_prompt_config:
+    activity_local_gen_system_prompt:
+      prompt: prompts/activity_questions/activity_local/activity_local_gen_system_prompt.txt
+    activity_local_gen_user_prompt:
+      prompt: prompts/activity_questions/activity_local/activity_local_gen_user_prompt.txt
+
+data_questions_prompt_config:
+  claim_extraction_system_prompt:
+    prompt: prompts/data_questions/claim_extraction_system_prompt.txt
+  data_global_prompt_config:
+    data_global_gen_user_prompt:
+      prompt: prompts/data_questions/data_global/data_global_gen_user_prompt.txt
+    data_global_gen_system_prompt:
+      prompt: prompts/data_questions/data_global/data_global_gen_system_prompt.txt
+  data_local_prompt_config:
+    data_local_gen_system_prompt:
+      prompt: prompts/data_questions/data_local/data_local_gen_system_prompt.txt
+    data_local_expansion_system_prompt:
+      prompt: prompts/data_questions/data_local/data_local_expansion_system_prompt.txt
+    data_local_gen_user_prompt:
+      prompt: prompts/data_questions/data_local/data_local_gen_user_prompt.txt

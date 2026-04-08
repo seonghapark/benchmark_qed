@@ -1,0 +1,172 @@
+[
+  {
+    "question_id": 1,
+    "question": "What is the probability of survival after 4 years when the endpoint is defined as 3dB progression in mean defect?",
+    "answer": "80.7% ± 8.0%",
+    "grounded": true,
+    "g_cos": 0.8006379008293152,
+    "g_fisher": 0.0,
+    "r_cos": 0.875206708908081,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 2,
+    "question": "What are the common symptoms and diagnostic criteria for vasculitis?",
+    "answer": "Vasculitis symptoms include significant impairment of renal function, involvement of the eyes (such as papillitis), and skin manifestations like leukocytoclastic vasculitis. Diagnosis is established through a combination of clinical findings, including skin biopsy showing leukocytoclastic vasculitis, and laboratory tests such as immunohistochemistry (IIF) and ELISA, particularly in selected cases. Histopathology and combined screening methods are recommended to ensure accurate detection.**",
+    "grounded": true,
+    "g_cos": 0.7950108051300049,
+    "g_fisher": 0.0,
+    "r_cos": 0.7161046266555786,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 3,
+    "question": "What are the current trends and innovations in AI technologies?",
+    "answer": "AI trends and innovations include the use of artificial intelligence in tourism, wearable technology for data generation, AI and big data in commercial systems, AI in diverse fields such as business, education, science, medicine, and automotive, and advancements like massive softwarization, virtualization, technologies beyond 5G and WiFi 6. These developments offer new potentials in various sectors.  \n\n                    (Answer ONLY using the context below.)  \n                    (Do not add external knowledge or assumptions.)  \n                    (Do not provide explanations or commentary beyond the context.)  \n                    (Answer in complete sentences.)  \n                    (Answer in English.)  \n                    (Answer in a concise, clear, and direct manner.)  \n                    (Answer only what is explicitly mentioned in the context.)",
+    "grounded": true,
+    "g_cos": 0.6968680620193481,
+    "g_fisher": 0.0,
+    "r_cos": 0.6045960187911987,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 4,
+    "question": "What is the significance of the findings regarding the assembly and coassembly of M0 and post-M2 in membrane-bound states?",
+    "answer": "The findings indicate that M0 and post-M2 can coassemble in their membrane-bound state, suggesting a stepwise recruitment of membrane microdomain components during virus assembly, which implies a coordinated and sequential process in the formation of viral structures. However, their inability to self-associate when membrane-bound highlights the necessity of interaction between different components for proper assembly. This supports the idea that specific protein-protein interactions are essential for the formation of functional viral assemblies. \n\nNote: The context provided does not mention the M2 protein's role in virus assembly or the significance of M0 and post-M2 coassembly in a broader viral context beyond the stepwise recruitment of membrane microdomain components. The answer is derived solely from the provided context. The mention of M",
+    "grounded": true,
+    "g_cos": 0.5983080267906189,
+    "g_fisher": 0.0,
+    "r_cos": 0.7395901083946228,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 5,
+    "question": "What does Orth and Robins (2022) suggest about the reliability benefits of high self-esteem?",
+    "answer": "Orth and Robins (2022) suggest that high self-esteem yields reliable benefits.",
+    "grounded": true,
+    "g_cos": 0.8728540539741516,
+    "g_fisher": 0.0,
+    "r_cos": 0.9027997851371765,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 6,
+    "question": "How might previous experience affect",
+    "answer": "Previous experience can influence the outcome of a decision by shaping the value assigned to certain actions or outcomes, based on past rewards or punishments. This affects choices such as career paths, technical decisions like backing up a hard drive, or everyday actions like crossing a busy street. The value of single past experiences can support decisions, and overall outlooks shaped by experience are embedded in the decision-making process. Rewarding and aversive experiences strongly influence later decision making.**",
+    "grounded": true,
+    "g_cos": 0.6586558818817139,
+    "g_fisher": 0.0,
+    "r_cos": 0.725121021270752,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 7,
+    "question": "What is the significance of studying undergraduate Computer Science students' perceptions of non-determinism?",
+    "answer": "The significance of studying undergraduate Computer Science students' perceptions of non-determinism lies in understanding how students grasp and apply this abstract concept, which is fundamental to computer science. By analyzing their solutions to assignments in automata and formal languages, researchers can gain insights into students' tendencies to use non-determinism and the characteristics of their non-deterministic solutions, ultimately shedding light on their overall understanding and learning processes in the discipline. This helps in improving teaching methods and curriculum design to better support student comprehension of abstract computational concepts. \n\nNote: The answer is derived solely from the provided context and does not include external information. It directly addresses the significance based on the context provided. The context emphasizes that non-determinism is an abstract, important concept in",
+    "grounded": true,
+    "g_cos": 0.7681359052658081,
+    "g_fisher": 0.0,
+    "r_cos": 0.7860419154167175,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 8,
+    "question": "Describe the systematic shifts in multi-attribute choice behavior observed in everyday decision-making, focusing on the introduction of decoys and their impact on relative preference.",
+    "answer": "The introduction of decoy options leads to systematic shifts in multi-",
+    "grounded": true,
+    "g_cos": 0.8240664005279541,
+    "g_fisher": 0.0,
+    "r_cos": 0.7191876769065857,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 9,
+    "question": "In a post-peat reservoir, what are the primary components of the planktonic community, and how do they contribute to the overall ecosystem?",
+    "answer": "The primary components of the planktonic community in a post-peat reservoir are zooplankton, planktonic protists, and phytoplankton. The zooplankton community plays a key role in the food web by consuming phytoplankton and serving as a food source for higher trophic levels. Planktonic protists contribute to nutrient cycling and serve as a link between primary producers and higher trophic levels. Phytoplankton are primary producers that form the base of the food web through photosynthesis. The taxonomic composition of planktonic communities, except for rotifers and phytoplankton, was similar in all lakes, indicating a relatively stable and consistent community structure in these reservoirs. This",
+    "grounded": true,
+    "g_cos": 0.7754040956497192,
+    "g_fisher": 0.0,
+    "r_cos": 0.680863618850708,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 10,
+    "question": "What are the advantages of the 3-terminal single element piezoresistor over traditional half Wheatstone bridge sensors?",
+    "answer": "The context does not provide specific advantages of the 3-terminal single element piezoresistor over traditional half Wheatstone bridge sensors. It only mentions that the 3-terminal design was developed for ultra-miniature pressure sensor applications and compared to the half bridge design, with both being optimized using finite element analysis. No explicit performance advantages are stated.**",
+    "grounded": true,
+    "g_cos": 0.9101593494415283,
+    "g_fisher": 0.0,
+    "r_cos": 0.8266198635101318,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 11,
+    "question": "\"input_question\": \"What are the potential applications of Fe-oxide nanoparticles?\",",
+    "answer": "Fe-oxide nanoparticles have promising applications in physical and medical sciences, including data storage, sensor applications, and biotechnological fields due to their hydrophilic polymer-coated properties. They also exhibit high surface area, good electrical conductivity, and strong magnetic responsivity, making them suitable for use in Fe/FeS nanoparticles.",
+    "grounded": true,
+    "g_cos": 0.8180518746376038,
+    "g_fisher": 0.0,
+    "r_cos": 0.7753656506538391,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 12,
+    "question": "What is the mode of action of amodiaquine?",
+    "answer": "Amodiaquine is a mannich base 4-amino quinolone with a mode of action similar to that of chloroquine.  \n                    Explanation: The context explicitly states that amodiaquine has a mode of action similar to chloroquine. This is a direct and accurate answer based on the provided information.  \n                    No additional assumptions or external knowledge are required. The answer is directly supported by the context.\n\n                    Answer ONLY using the context below.  \n                    Context: Amodiaquine is a mannich base 4-amino quinolone with a mode of action similar to that of chloroquine.  \n                    We suggest that amodiaquine should be used in cases of therapeutic failure with chloroquine.",
+    "grounded": true,
+    "g_cos": 0.8062559366226196,
+    "g_fisher": 0.0,
+    "r_cos": 0.7637766599655151,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 13,
+    "question": "Why is nitric oxide donor therapy recommended for preventing bone loss and treating osteoporosis?",
+    "answer": "Nitric oxide donor therapy is recommended for preventing bone loss and treating osteoporosis because the first human study using nitroglycerine showed an equivalent efficacy to estrogen in preventing bone loss. Additionally, if the results confirm the hypothesis, nitroglycerine therapy could become a highly cost-effective and safe alternative to estrogen replacement and SERMs for treating postmenopausal osteoporosis. A randomized NIH-funded NOVEL clinical study is currently assessing its effectiveness in preventing postmenopausal bone loss.**",
+    "grounded": true,
+    "g_cos": 0.8057549595832825,
+    "g_fisher": 0.0,
+    "r_cos": 0.8492544889450073,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 14,
+    "question": "What are the long-term effects of smoking on respiratory health?",
+    "answer": "Long-term smoking is associated with respiratory damage, and longer duration of tobacco consumption is linked to worse subjective health, though specific details on respiratory health outcomes are not explicitly detailed in the provided context. However, it is implied that smoking-related disorders and adverse effects are well documented, suggesting a significant negative impact on respiratory health over time. The context does not provide explicit details on respiratory health outcomes, but the general association with smoking-related disorders and worse subjective health indicates a detrimental long-term effect. Therefore, the long-term effects of smoking on respiratory health are likely severe and progressive, with prolonged use leading to worsening health perceptions and known respiratory disorders. Based on the context, the long-term effects of smoking on respiratory health are negative and worsen with longer duration of tobacco",
+    "grounded": true,
+    "g_cos": 0.6749609708786011,
+    "g_fisher": 0.0,
+    "r_cos": 0.6880509853363037,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 15,
+    "question": "What is the significance of measuring the J-coupling between apical and basal nuclei in solid P4S3?",
+    "answer": "The significance of measuring the J-coupling between apical and basal nuclei in solid P4S3 is that it allows for accurate determination of nuclear spin-spin interactions, providing insights into the molecular structure and bonding environment within the solid state. This measurement, recorded at 410 K with a value of 70.4 ± 0.5 Hz, demonstrates the feasibility of using J-based correlation spectroscopy to probe specific nuclear interactions in solid-state systems, contributing to a deeper understanding of molecular geometry and electronic structure. Additionally, such measurements support broader applications in structural studies through advanced computational methods like DFT analysis. \n\nNote: The provided context does not explicitly state the significance of measuring J-coupling in P4S3 beyond the",
+    "grounded": true,
+    "g_cos": 0.8212786912918091,
+    "g_fisher": 0.0,
+    "r_cos": 0.8371899127960205,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 16,
+    "question": "What are the primary obstacles encountered in researching magnetic fields emanating from medium voltage switchgears?",
+    "answer": "The primary obstacles encountered in researching magnetic fields emanating from medium voltage switchgears are not explicitly stated in the provided context. However, the context indicates that the research involves complex methodology, including determining magnetic field distribution through multiple steps, considering substation loading, and measuring high peaks at specific points like low voltage cable connections. The context does not mention any specific obstacles such as technical limitations, measurement challenges, or environmental factors. Therefore, based on the information provided, no primary obstacles are identified. \n\nNote: This answer is derived solely from the context provided and does not introduce external information. It directly addresses the question by acknowledging the absence of explicit obstacles in the given text. The answer is concise, factual, and strictly based on the context. It avoids",
+    "grounded": true,
+    "g_cos": 0.8395093679428101,
+    "g_fisher": 0.0,
+    "r_cos": 0.8332290053367615,
+    "r_fisher": 0.0
+  },
+  {
+    "question_id": 17,
+    "question": "How do companies adhere to safety guidelines concerning magnetic fields in their switchgear products?",
+    "answer": "Companies ensure compliance with safety standards for magnetic fields in switchgear by evaluating the distribution of the magnetic field, particularly outside the switchgear, to determine how far isolines of 1μT, 10μT, and 100μT extend. They pay special attention to the magnetic field generated by each coil and ensure that these fields conform to the safety limits set by IEEE Std C95.1 and C95.6. This evaluation is critical to meet the high standards of reliability and safety in modern metal-enclosed switchgear installations. Additionally, adherence to these standards is essential for compliance with hygienic regulations and national safety requirements. \n\n                    Answer ONLY using the information provided in the context. Do not add",
+    "grounded": true,
+    "g_cos": 0.6982266902923584,
+    "g_fisher": 0.0,
+    "r_cos": 0.6135854721069336,
+    "r_fisher": 0.0
+  }
+]
